@@ -1,10 +1,11 @@
 // Initialize and add the map
+
 var gMap, infoWindow, marker;
+
 initMap();
 
 function initMap() {
     const myLatLng = { lat: 0, lng: 0 };
-
     gMap = new google.maps.Map(document.getElementById("gMap"), {
         zoom: 2,
         center: myLatLng,
@@ -29,7 +30,6 @@ gpsBtn.addEventListener("change", function () {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
                     };
-
                     marker.setPosition(pos);
                     gMap.panTo(pos);
                     gMap.setZoom(16);
@@ -55,3 +55,6 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     );
     infoWindow.open(gMap);
 }
+
+
+
