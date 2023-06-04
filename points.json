@@ -1,0 +1,18 @@
+[
+    {
+        "gps": {
+            "lat": 62.24423,
+            "lng": 25.7123
+        },
+        "title": "Title here",
+        "body": "This is message."
+    },
+    {
+        "gps": {
+            "lat": 62.24434,
+            "lng": 25.7134
+        },
+        "title": "Title here",
+        "body": "This is message."
+    }
+]
