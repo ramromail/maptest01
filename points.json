@@ -1,18 +1,17 @@
 [
     {
         "gps": {
-            "lat": 62.2442,
-            "lng": 25.7123
+            "lat": 62.24829,
+            "lng": 25.70975
         },
         "title": "First achivement unlocked 😀",
         "body": "Yes, Well done 🕺"
     },
     {
         "gps": {
-            "lat": 62.2343,
-            "lng": 25.7134
+            "lat": 62.24669,
+            "lng": 25.71107
         },
         "title": "Second achivement unlocked 😀",
-        "body": "Once again, Well done 🕺"    
-    }
+        "body": "Once again, Well done 🕺"    }
 ]
