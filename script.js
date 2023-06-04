@@ -11,17 +11,16 @@ async function initMap() {
         center: myLatLng,
     });
 
-    gMap.fitBounds({south: 60.48, west: 19.87, north: 69.34, east: 33.94});
+    gMap.fitBounds({ south: 60.48, west: 19.87, north: 69.34, east: 33.94 });
 
     gMap.addListener("click", (e) => {
         // lockPosition = false;
-        console.log(gMap.get);
+        console.log(e);
     });
 
     gMap.addListener("dragend", (e) => {
         lockPosition = false;
         console.log(e);
-        // console.log(e.latlng.lat , e.latlng.lng);
     });
 
     marker.push(new google.maps.Marker({
@@ -52,7 +51,7 @@ async function initMap() {
 
         let infoW = new google.maps.InfoWindow({
             content: '<div><p><b>' + element.title + '</b></p><p>' + element.body + '</p></div>',
-          });
+        });
 
 
         newMarker.addListener('click', function () {
@@ -65,6 +64,18 @@ async function initMap() {
         marker.push(newMarker);
     });
 
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            const pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+            };
+
+            gMap.setCenter(pos);
+            gMap.setZoom(15);
+            marker[0].setPosition(pos);
+        });
+    }
 }
 
 
@@ -82,6 +93,7 @@ gpsBtn.addEventListener("change", function () {
                     console.log(pos);
                     marker[0].setPosition(crd);
                     if (lockPosition) {
+                        gMap.setZoom(16);
                         gMap.panTo(crd);
                     }
                 }, function (err) {
