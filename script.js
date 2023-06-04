@@ -1,8 +1,9 @@
 // Initialize and add the map
-var gMap, infoWindow, marker, watchPos;
-initMap();
+var gMap, infoWindow, marker = [], watchPos, lockPosition = true;
+window.initMap = initMap;
+window.initMap();
 
-function initMap() {
+async function initMap() {
     const myLatLng = { lat: 0, lng: 0 };
 
     gMap = new google.maps.Map(document.getElementById("gMap"), {
@@ -10,34 +11,55 @@ function initMap() {
         center: myLatLng,
     });
 
-    marker = new google.maps.Marker({
+    gMap.addListener("click", (e) => {
+        // lockPosition = false;
+        console.log(e);
+    });
+    gMap.addListener("dragend", (e) => {
+        lockPosition = false;
+    });
+
+
+    marker.push(new google.maps.Marker({
         position: myLatLng,
         map: gMap,
         title: "Hello World!",
+        icon: {
+            url: './blueDot.png',
+            anchor: new google.maps.Point(12, 12),
+            scaledSize: new google.maps.Size(24, 24)
+        }
+    }));
+
+    const response = await fetch("points.json");
+    const jsonData = await response.json();
+    console.log(jsonData);
+    jsonData.forEach(element => {
+        console.log(element);
+        let newMarker = new google.maps.Marker({
+            position: { lat: element.gps.lat, lng: element.gps.lng },
+            map: gMap,
+            icon: {
+                url: './gem.png',
+                anchor: new google.maps.Point(12, 12),
+                scaledSize: new google.maps.Size(24, 24)
+            }
+        });
+
+        newMarker.addListener('click', function () {
+            console.log('I was clicked');
+        });
+
+        marker.push(newMarker);
     });
+
 }
 
-window.initMap = initMap;
 
 let gpsBtn = document.querySelector('input#locateMeGPS[type=checkbox]');
 gpsBtn.addEventListener("change", function () {
     if (this.checked) {
         if (navigator.geolocation) {
-            // navigator.geolocation.getCurrentPosition(
-            //     (position) => {
-            //         const pos = {
-            //             lat: position.coords.latitude,
-            //             lng: position.coords.longitude,
-            //         };
-
-            //         marker.setPosition(pos);
-            //         gMap.panTo(pos);
-            //         gMap.setZoom(16);
-            //     },
-            //     () => {
-            //         handleLocationError(true, infoWindow, gMap.getCenter());
-            //     });
-
             watchPos = navigator.geolocation.watchPosition(
                 function (pos) {
                     // successfunction
@@ -46,9 +68,10 @@ gpsBtn.addEventListener("change", function () {
                         lng: pos.coords.longitude,
                     };
                     console.log(pos);
-                    gMap.panTo(crd);
-                    marker.setPosition(crd);
-                    gMap.setZoom(16);
+                    marker[0].setPosition(crd);
+                    if (lockPosition) {
+                        gMap.panTo(crd);
+                    }
                 }, function (err) {
                     // errors occured
                     console.error('Error occured, ', err);
