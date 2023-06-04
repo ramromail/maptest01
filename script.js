@@ -65,14 +65,15 @@ async function initMap() {
             let lat_1 = e.latLng.lat();
             let lng_1 = e.latLng.lng();
 
-            if(getDistance(lat_1, lng_1, curLat, curLng) <= 10) {
+            let distance = getDistance(lat_1, lng_1, curLat, curLng);
+            if( distance <= 10) {
                 infoW.open({
                     anchor: newMarker,
                     map: gMap,
                 });
             }
             else {
-                alert('You are too far.');
+                alert('You are too far, ' + Number.parseFloat(distance).toFixed(2) + ' m away.');
             }
         });
 
