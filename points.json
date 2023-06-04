@@ -1,18 +1,18 @@
 [
     {
         "gps": {
-            "lat": 62.24423,
+            "lat": 62.2442,
             "lng": 25.7123
         },
-        "title": "Title here",
-        "body": "This is message."
+        "title": "First achivement unlocked 😀",
+        "body": "Yes, Well done 🕺"
     },
     {
         "gps": {
-            "lat": 62.24434,
+            "lat": 62.2343,
             "lng": 25.7134
         },
-        "title": "Title here",
-        "body": "This is message."
+        "title": "Second achivement unlocked 😀",
+        "body": "Once again, Well done 🕺"    
     }
 ]
