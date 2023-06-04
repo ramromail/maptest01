@@ -11,19 +11,23 @@ async function initMap() {
         center: myLatLng,
     });
 
+    gMap.fitBounds({south: 60.48, west: 19.87, north: 69.34, east: 33.94});
+
     gMap.addListener("click", (e) => {
         // lockPosition = false;
-        console.log(e);
-    });
-    gMap.addListener("dragend", (e) => {
-        lockPosition = false;
+        console.log(gMap.get);
     });
 
+    gMap.addListener("dragend", (e) => {
+        lockPosition = false;
+        console.log(e);
+        // console.log(e.latlng.lat , e.latlng.lng);
+    });
 
     marker.push(new google.maps.Marker({
         position: myLatLng,
         map: gMap,
-        title: "Hello World!",
+        title: "You are here.",
         icon: {
             url: './blueDot.png',
             anchor: new google.maps.Point(12, 12),
@@ -33,9 +37,9 @@ async function initMap() {
 
     const response = await fetch("points.json");
     const jsonData = await response.json();
-    console.log(jsonData);
+
     jsonData.forEach(element => {
-        console.log(element);
+        // console.log(element);
         let newMarker = new google.maps.Marker({
             position: { lat: element.gps.lat, lng: element.gps.lng },
             map: gMap,
@@ -46,8 +50,16 @@ async function initMap() {
             }
         });
 
+        let infoW = new google.maps.InfoWindow({
+            content: '<div><p><b>' + element.title + '</b></p><p>' + element.body + '</p></div>',
+          });
+
+
         newMarker.addListener('click', function () {
-            console.log('I was clicked');
+            infoW.open({
+                anchor: newMarker,
+                map: gMap,
+            });
         });
 
         marker.push(newMarker);
