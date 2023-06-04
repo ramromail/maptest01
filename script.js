@@ -1,5 +1,12 @@
 // Initialize and add the map
-var gMap, infoWindow, marker = [], watchPos, lockPosition = true;
+var gMap
+    , infoWindow
+    , marker = []
+    , watchPos
+    , lockPosition = true
+    , curLat = 0
+    , curLng = 0;
+
 window.initMap = initMap;
 window.initMap();
 
@@ -14,8 +21,8 @@ async function initMap() {
     gMap.fitBounds({ south: 60.48, west: 19.87, north: 69.34, east: 33.94 });
 
     gMap.addListener("click", (e) => {
-        // lockPosition = false;
         console.log(e);
+        console.log(e.latLng.toJSON());
     });
 
     gMap.addListener("dragend", (e) => {
@@ -54,11 +61,19 @@ async function initMap() {
         });
 
 
-        newMarker.addListener('click', function () {
-            infoW.open({
-                anchor: newMarker,
-                map: gMap,
-            });
+        newMarker.addListener('click', function (e) {
+            let lat_1 = e.latLng.lat();
+            let lng_1 = e.latLng.lng();
+
+            if(getDistance(lat_1, lng_1, curLat, curLng) <= 10) {
+                infoW.open({
+                    anchor: newMarker,
+                    map: gMap,
+                });
+            }
+            else {
+                alert('You are too far.');
+            }
         });
 
         marker.push(newMarker);
@@ -71,6 +86,11 @@ async function initMap() {
                 lng: position.coords.longitude,
             };
 
+            curLat = pos.lat;
+            curLng = pos.lng;
+            console.log(curLat, curLng);
+
+
             gMap.setCenter(pos);
             gMap.setZoom(15);
             marker[0].setPosition(pos);
@@ -82,6 +102,7 @@ async function initMap() {
 let gpsBtn = document.querySelector('input#locateMeGPS[type=checkbox]');
 gpsBtn.addEventListener("change", function () {
     if (this.checked) {
+        lockPosition = true;
         if (navigator.geolocation) {
             watchPos = navigator.geolocation.watchPosition(
                 function (pos) {
@@ -91,6 +112,12 @@ gpsBtn.addEventListener("change", function () {
                         lng: pos.coords.longitude,
                     };
                     console.log(pos);
+
+                    curLat = crd.lat;
+                    curLng = crd.lng;
+
+                    console.log(curLat, curLng);
+
                     marker[0].setPosition(crd);
                     if (lockPosition) {
                         gMap.setZoom(16);
@@ -124,4 +151,19 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
             : "Error: Your browser doesn't support geolocation."
     );
     infoWindow.open(gMap);
+}
+
+function getDistance(lat_1, lng_1, lat_2, lng_2) {
+    var R = 6371000, RAD = Math.PI / 180;
+
+    var dLat = RAD * (lat_2 - lat_1);
+    var dLon = RAD * (lng_2 - lng_1);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(RAD * lat_1) * Math.cos(RAD * lat_2) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+
+    return d;
 }
