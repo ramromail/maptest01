@@ -20,7 +20,15 @@
             "lat": 62.22989,
             "lng": 25.74160
         },
-        "title": "Welcome 😀",
-        "body": "Welcome to JUY.🕺"
+        "title": "Lunch time 😀",
+        "body": "Lets get some desert 🥓."
+    },
+    {
+        "gps": {
+            "lat": 62.22919,
+            "lng": 25.73849
+        },
+        "title": "Fresh air 🌊",
+        "body": "Take these stairs to heavens door 🌠."
     }
 ]
