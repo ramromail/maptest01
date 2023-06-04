@@ -21,13 +21,11 @@ async function initMap() {
     gMap.fitBounds({ south: 60.48, west: 19.87, north: 69.34, east: 33.94 });
 
     gMap.addListener("click", (e) => {
-        console.log(e);
         console.log(e.latLng.toJSON());
     });
 
     gMap.addListener("dragend", (e) => {
         lockPosition = false;
-        console.log(e);
     });
 
     marker.push(new google.maps.Marker({
@@ -45,7 +43,6 @@ async function initMap() {
     const jsonData = await response.json();
 
     jsonData.forEach(element => {
-        // console.log(element);
         let newMarker = new google.maps.Marker({
             position: { lat: element.gps.lat, lng: element.gps.lng },
             map: gMap,
@@ -73,7 +70,7 @@ async function initMap() {
                 });
             }
             else {
-                alert('You are too far, ' + Number.parseFloat(distance).toFixed(2) + ' m away.');
+                alert('You are too far, ' + Number.parseFloat(distance).toFixed(2) + ' m away. Come closer.');
             }
         });
 
@@ -89,8 +86,6 @@ async function initMap() {
 
             curLat = pos.lat;
             curLng = pos.lng;
-            console.log(curLat, curLng);
-
 
             gMap.setCenter(pos);
             gMap.setZoom(15);
@@ -112,18 +107,25 @@ gpsBtn.addEventListener("change", function () {
                         lat: pos.coords.latitude,
                         lng: pos.coords.longitude,
                     };
-                    console.log(pos);
+                    console.log(crd.lat, crd.lng, curLat, curLng);
 
-                    curLat = crd.lat;
-                    curLng = crd.lng;
+                    let distance = getDistance(crd.lat, crd.lng, curLat, curLng);
+                    if( distance >= 2) {
+                        console.log('Yes : ' + Number.parseFloat(distance).toFixed(2) + 'm.');
 
-                    console.log(curLat, curLng);
+                        curLat = crd.lat;
+                        curLng = crd.lng;
 
-                    marker[0].setPosition(crd);
-                    if (lockPosition) {
-                        gMap.setZoom(16);
-                        gMap.panTo(crd);
+                        marker[0].setPosition(crd);
+                        if (lockPosition) {
+                            gMap.setZoom(16);
+                            gMap.panTo(crd);
+                        }
                     }
+                    else {
+                        console.log('Moved: ' + Number.parseFloat(distance).toFixed(2) + 'm.');
+                    }
+
                 }, function (err) {
                     // errors occured
                     console.error('Error occured, ', err);
@@ -139,7 +141,6 @@ gpsBtn.addEventListener("change", function () {
             handleLocationError(false, infoWindow, gMap.getCenter());
         }
     } else {
-        console.log("Checkbox is not checked..");
         navigator.geolocation.clearWatch(watchPos);
     }
 });
