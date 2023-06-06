@@ -63,7 +63,7 @@ async function initMap() {
             let lng_1 = e.latLng.lng();
 
             let distance = getDistance(lat_1, lng_1, curLat, curLng);
-            if( distance <= 10) {
+            if( distance <= 10000) {
                 infoW.open({
                     anchor: newMarker,
                     map: gMap,
