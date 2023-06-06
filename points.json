@@ -30,5 +30,21 @@
         },
         "title": "Fresh air 🌊",
         "body": "Take these stairs to heavens door 🌠."
+    },
+    {
+        "gps": {
+           "lat": 62.24262, 
+	   "lng": 25.74737
+        },
+        "title": "Kompassi 🌊",
+        "body": "https://google.com/ 🌠."
+    },
+    {
+        "gps": {
+            "lat": 62.21822, 
+	    "lng": 25.734095
+        },
+        "title": "Fresh air 🌊",
+        "body": "https://www.luontoon.fi/leivonmaki 🌠."
     }
 ]
